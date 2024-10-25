@@ -16,7 +16,8 @@ namespace TODO_app
         string page;
         public void setPage()
         {
-            switch(page)
+            //changing the label text on the form
+            switch (page)
             {
                 case "main":
                     pageLabel.Text = "Main page";
@@ -27,13 +28,32 @@ namespace TODO_app
                 case "deleted":
                     pageLabel.Text = "Deleted tasks";
                     break;
-                case "create":
-                    pageLabel.Text = "Create new task";
-                    break;
                 default:
                     pageLabel.Text = "Main page";
                     break;
             }
+        }
+
+        public string createTask()
+        {
+            string msg;
+            // checking if everything is alright with the inputs
+            if (title_inp.Text.Length < 3)
+            {
+                msg = "The Title is not long enough.";
+                return msg;
+            }
+            if (desc_input.Text.Length < 3 || desc_input.Text.Length > 300)
+            {
+                msg = "The description is too short or too long.";
+                return msg;
+            }
+
+            dt.Rows.Add(title_inp.Text, desc_input.Text);
+            msg = "Successfully added a new task.";
+            title_inp.Text = "";
+            desc_input.Text = "";
+            return msg;
         }
         public Form1()
         {
@@ -47,12 +67,18 @@ namespace TODO_app
         private void mainpage_Click(object sender, EventArgs e)
         {
             page = "main";
+            todoList.Show();
+            deleted_tasks.Hide();
+
             setPage();
         }
 
         private void comptasks_Click(object sender, EventArgs e)
         {
             page = "completed";
+            todoList.Hide();
+            deleted_tasks.Hide();
+
             setPage();
 
         }
@@ -60,14 +86,56 @@ namespace TODO_app
         private void deltasks_Click(object sender, EventArgs e)
         {
             page = "deleted";
+            todoList.Hide();
+            deleted_tasks.Show();
             setPage();
 
         }
 
         private void createtasks_Click(object sender, EventArgs e)
         {
-            page = "create";
-            setPage();
+            string task = createTask();
+            MessageBox.Show(task);
+        }
+
+
+        DataTable dt = new DataTable();
+        DataTable deletedTasks = new DataTable();
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //adding columns
+            dt.Columns.Add("Title");
+            dt.Columns.Add("Description");
+            deletedTasks.Columns.Add("Title");
+            deletedTasks.Columns.Add("Description");
+            deletedTasks.Columns.Add("Deleted at");
+
+            todoList.DataSource = dt;
+            deleted_tasks.DataSource = deletedTasks;
+        }
+
+        private void set_to_complete_Click(object sender, EventArgs e)
+        {
+            //deleting the selected task
+
+            //moving to completed.
+
+        }
+
+        private void set_to_deleted_Click(object sender, EventArgs e)
+        {
+            //uploading task to the sql, and moving to deleted tasks.
+
+            string title;
+            string desc;
+            DateTime dateTime = DateTime.UtcNow.Date;
+            int selected = todoList.CurrentCell.RowIndex;
+            title = dt.Rows[selected]["Title"].ToString();
+            desc = dt.Rows[selected]["Description"].ToString();
+
+            //deleting the selected task
+            dt.Rows[selected].Delete();
+
         }
     }
 }
