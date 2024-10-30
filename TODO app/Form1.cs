@@ -14,6 +14,8 @@ namespace TODO_app
     public partial class Form1 : Form
     {
         string page;
+        string title;
+        string desc;
         public void setPage()
         {
             //changing the label text on the form
@@ -21,12 +23,18 @@ namespace TODO_app
             {
                 case "main":
                     pageLabel.Text = "Main page";
+                    set_to_deleted.Show();
+                    set_to_complete.Show();
                     break;
                 case "completed":
                     pageLabel.Text = "Completed tasks";
+                    set_to_deleted.Hide();
+                    set_to_complete.Hide();
                     break;
                 case "deleted":
                     pageLabel.Text = "Deleted tasks";
+                    set_to_deleted.Hide();
+                    set_to_complete.Hide();
                     break;
                 default:
                     pageLabel.Text = "Main page";
@@ -62,6 +70,10 @@ namespace TODO_app
             //SqlConnection con = new SqlConnection(connectionStr);
             //con.Open();
             page = "main";
+            todoList.Show();
+            deleted_tasks.Hide();
+            completed_tasks.Hide();
+
         }
 
         private void mainpage_Click(object sender, EventArgs e)
@@ -69,7 +81,7 @@ namespace TODO_app
             page = "main";
             todoList.Show();
             deleted_tasks.Hide();
-
+            completed_tasks.Hide();
             setPage();
         }
 
@@ -78,7 +90,7 @@ namespace TODO_app
             page = "completed";
             todoList.Hide();
             deleted_tasks.Hide();
-
+            completed_tasks.Show();
             setPage();
 
         }
@@ -88,6 +100,8 @@ namespace TODO_app
             page = "deleted";
             todoList.Hide();
             deleted_tasks.Show();
+            completed_tasks.Hide();
+
             setPage();
 
         }
@@ -101,6 +115,7 @@ namespace TODO_app
 
         DataTable dt = new DataTable();
         DataTable deletedTasks = new DataTable();
+        DataTable completedTasks = new DataTable();
         private void Form1_Load(object sender, EventArgs e)
         {
             //adding columns
@@ -109,16 +124,25 @@ namespace TODO_app
             deletedTasks.Columns.Add("Title");
             deletedTasks.Columns.Add("Description");
             deletedTasks.Columns.Add("Deleted at");
-
+            completedTasks.Columns.Add("Title");
+            completedTasks.Columns.Add("Description");
+            completedTasks.Columns.Add("Completed at");
             todoList.DataSource = dt;
             deleted_tasks.DataSource = deletedTasks;
+            completed_tasks.DataSource = completedTasks;
         }
 
         private void set_to_complete_Click(object sender, EventArgs e)
         {
-            //deleting the selected task
+            //uploading task to the sql, and moving to deleted tasks.
 
-            //moving to completed.
+            DateTime dateTime = DateTime.UtcNow.Date;
+            int selected = todoList.CurrentCell.RowIndex;
+            title = dt.Rows[selected]["Title"].ToString();
+            desc = dt.Rows[selected]["Description"].ToString();
+            completedTasks.Rows.Add(title, desc, dateTime.ToString("yyyy/MM/d"));
+            //deleting the selected task
+            dt.Rows[selected].Delete();
 
         }
 
@@ -126,15 +150,18 @@ namespace TODO_app
         {
             //uploading task to the sql, and moving to deleted tasks.
 
-            string title;
-            string desc;
             DateTime dateTime = DateTime.UtcNow.Date;
             int selected = todoList.CurrentCell.RowIndex;
             title = dt.Rows[selected]["Title"].ToString();
             desc = dt.Rows[selected]["Description"].ToString();
-
+            deletedTasks.Rows.Add(title, desc, dateTime.ToString("yyyy/MM/d"));
             //deleting the selected task
             dt.Rows[selected].Delete();
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
         }
     }

@@ -45,9 +45,11 @@
             this.set_to_deleted = new System.Windows.Forms.Button();
             this.set_to_complete = new System.Windows.Forms.Button();
             this.deleted_tasks = new System.Windows.Forms.DataGridView();
+            this.completed_tasks = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.todoList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deleted_tasks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.completed_tasks)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -203,12 +205,24 @@
             this.deleted_tasks.Size = new System.Drawing.Size(797, 563);
             this.deleted_tasks.TabIndex = 12;
             // 
+            // completed_tasks
+            // 
+            this.completed_tasks.AllowUserToOrderColumns = true;
+            this.completed_tasks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.completed_tasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.completed_tasks.Location = new System.Drawing.Point(15, 68);
+            this.completed_tasks.Name = "completed_tasks";
+            this.completed_tasks.Size = new System.Drawing.Size(797, 563);
+            this.completed_tasks.TabIndex = 13;
+            this.completed_tasks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1024, 643);
+            this.Controls.Add(this.completed_tasks);
             this.Controls.Add(this.deleted_tasks);
             this.Controls.Add(this.set_to_complete);
             this.Controls.Add(this.set_to_deleted);
@@ -226,6 +240,7 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.todoList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deleted_tasks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.completed_tasks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,6 +265,7 @@
         private System.Windows.Forms.Button set_to_deleted;
         private System.Windows.Forms.Button set_to_complete;
         private System.Windows.Forms.DataGridView deleted_tasks;
+        private System.Windows.Forms.DataGridView completed_tasks;
     }
 }
 
